@@ -1,21 +1,19 @@
-import React, { useState } from 'react'
-import { Navbar, TodoForm, TodoList } from './components'
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Navbar } from './components'
+import { TodosPage, AboutPage } from './pages'
 
 const App: React.FC = () => {
-  const [todos, setTodos] = useState([])
-
-  const onAddHandler = (title: string) => {
-    console.log('title', title)
-  }
-
   return (
-    <>
+    <Router>
       <Navbar />
       <div className='container'>
-        <TodoForm onAdd={onAddHandler} />
-        <TodoList todos={todos} />
+        <Switch>
+          <Route component={TodosPage} path='/' exact />
+          <Route component={AboutPage} path='/about' />
+        </Switch>
       </div>
-    </>
+    </Router>
   )
 }
 

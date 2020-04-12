@@ -1,19 +1,45 @@
 import React from 'react'
+import { ITodo } from '../interfaces'
 
 type TodoListProps = {
-  todos: any[]
+  todos: ITodo[]
+  onToggle: (id: number) => void
+  onRemove: (id: number) => void
 }
 
-const TodoList: React.FC<TodoListProps> = ({ todos }) => {
+const TodoList: React.FC<TodoListProps> = ({ todos, onToggle, onRemove }) => {
+  const removeHandler = (event: React.MouseEvent, id: number) => {
+    event.preventDefault()
+    onRemove(id)
+  }
+
+  if (!todos.length) {
+    return <p className='center'>Пока дел нет!</p>
+  }
+
   return (
     <ul>
-      <li className='todo'>
-        <label>
-          <input type='checkbox' />
-          <span></span>
-          <i className='material-icons red-text'>delete</i>
-        </label>
-      </li>
+      {todos.map(todo => {
+        const classes = ['todo']
+        if (todo.completed) {
+          classes.push('completed')
+        }
+
+        return (
+          <li className={classes.join(' ')} key={todo.id}>
+            <label>
+              <input type='checkbox' checked={todo.completed} onChange={() => onToggle(todo.id)} />
+              <span>{todo.title}</span>
+              <i
+                className='material-icons red-text'
+                onClick={event => removeHandler(event, todo.id)}
+              >
+                delete
+              </i>
+            </label>
+          </li>
+        )
+      })}
     </ul>
   )
 }
